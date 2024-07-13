@@ -8,4 +8,4 @@ The second and third projects are related to kinematic and inverse kinematic and
 ![](https://github.com/musalmaz/EE451_IntroductiontoRobotics/blob/main/vids/touch.gif).
 
 The last project is about path planning and obstacle avoidance and a turtlebot is used.
-<video src='https://github.com/musalmaz/EE451_IntroductiontoRobotics/blob/main/vids/turtlebot.mp4' width=180/>
+![](https://github.com/musalmaz/EE451_IntroductiontoRobotics/blob/main/vids/turtlebot.gif).
