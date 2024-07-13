@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<robot name="cube">
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+    <!-- Add gazebo part -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/cube</robotNamespace>
+    </plugin>
+  </gazebo>
+  <gazebo reference="cube">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+</robot>

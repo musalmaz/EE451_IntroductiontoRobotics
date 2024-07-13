@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="default">
+    <!-- Define a ground plane (a plane is an infinite surface) -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- Include sunlight -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- You can define additional environment properties, like gravity, here -->
+
+  </world>
+</sdf>

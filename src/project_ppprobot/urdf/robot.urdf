@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+
+<robot name="PPP_Robot">
+    <!-- Define the bottom part -->
+  <link name="bottom_link">
+    <visual>
+      <origin xyz="0 0 0.0005" rpy="0 0 0"/> 
+      <geometry>
+        <cylinder length="0.01" radius="0.2"/>
+      </geometry>
+    </visual>
+    <!-- <collision>
+      <origin xyz="0 0 0.0005" rpy="0 0 0"/> 
+      <geometry>
+        <cylinder length="0.01" radius="0.2"/>
+      </geometry>
+    </collision> -->
+    <inertial>
+      <mass value="100000"/>
+      <inertia ixx="2.5" ixy="0.0" ixz="0.0" iyy="2.5" iyz="0.0" izz="0.1"/>
+    </inertial>
+  </link>
+
+    <!-- Define the Z-arm link (30 cm along the Z-axis) -->
+  <link name="z_arm_link">
+    <visual>
+     <origin xyz="0 0 0.2" rpy="0 0 0"/> 
+      <geometry>
+        <box size="0.05 0.05 0.4"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.2" rpy="0 0 0"/> 
+      <geometry>
+        <box size="0.05 0.05 0.4"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.0035" ixy="0.0" ixz="0.0" iyy="0.00042" iyz="0.0" izz="0.0035"/>
+    </inertial>
+  </link>
+
+  <joint name="fixed_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="z_arm_link"/>
+    <child link="bottom_link"/>
+  </joint>
+
+	<link name="movable_link">
+ 	 <visual>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/> 
+    	<geometry>
+      	<box size="0.1 0.1 0.1"/>
+    	</geometry>
+      <material name="blue">
+        <color rgba="0 0 0.8 1"/>
+      </material>
+  	</visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.000166" ixy="0.0" ixz="0.0" iyy="0.000166" iyz="0.0" izz="0.000166"/>
+    </inertial>
+	</link>
+
+  <!-- Define the first prismatic joint along the Z-axis -->
+  <joint name="z_prismatic_joint" type="prismatic">
+    <origin xyz="0 0 0.3" rpy="0 0 0"/>
+    <parent link="z_arm_link"/>
+    <child link="movable_link"/>
+    <!-- Define the axis of motion along the Z-axis -->
+    <axis xyz="0 0 1"/>
+    <!-- Define the prismatic joint limit (20 cm) -->
+    <limit lower="-0.15" upper="0.15" effort="10000.0" velocity="0.05" />
+  </joint>
+
+  <!-- Define the X-arm link (110 cm along the X-axis) -->
+  <link name="x_arm_link">
+    <visual>
+      <geometry>
+        <box size="1.1 0.05 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.1 0.05 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.101" ixy="0.0" ixz="0.0" iyy="0.00042" iyz="0.0" izz="0.101"/>
+    </inertial>
+  </link>
+
+  <!-- Define the second prismatic joint along the X-axis -->
+  <joint name="x_prismatic_joint" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="movable_link"/>
+    <child link="x_arm_link"/>
+    <!-- Define the axis of motion along the X-axis -->
+    <axis xyz="1 0 0"/>
+    <!-- Define the prismatic joint limit (40 cm) -->
+    <limit lower="-0.2" upper="0.55" effort="1000.0" velocity="0.05" />
+  </joint>
+
+  <!-- Define the end effector link (120 cm along the Y-axis) -->
+  <link name="y_arm_link">
+    <visual>
+      <geometry>
+        <box size="0.05 1.2 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.05 1.2 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <inertia ixx="0.101" ixy="0.0" ixz="0.0" iyy="0.00042" iyz="0.0" izz="0.101"/>
+    </inertial>
+  </link>
+
+
+  <!-- Define the third prismatic joint along the Y-axis -->
+  <joint name="y_prismatic_joint" type="prismatic">
+    <origin xyz="0.55 0 0" rpy="0 0 0"/>
+    <parent link="x_arm_link"/>
+    <child link="y_arm_link"/>
+    <!-- Define the axis of motion along the Y-axis -->
+    <axis xyz="0 1 0"/>
+    <!-- Define the prismatic joint limit (10 cm) -->
+    <limit lower="-0.3" upper="0.6" effort="1000.0" velocity="0.05" />
+  </joint>
+
+    <!-- Define the gripper link (10 cm along the Z-axis) -->
+  <link name="gripper">
+    <visual>
+      <geometry>
+        <box size="0.05 0.05 0.08"/>
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.05 0.05 0.08"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.101" ixy="0.0" ixz="0.0" iyy="0.00042" iyz="0.0" izz="0.101"/>
+    </inertial>
+  </link>
+
+  <joint name="fixed_gripper_joint" type="fixed">
+    <origin xyz="0 0.575 -0.05" rpy="0 0 0"/>
+    <parent link="y_arm_link"/>
+    <child link="gripper"/>
+  </joint>
+
+  <!-- Add gazebo part -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/PPP_Robot</robotNamespace>
+    </plugin>
+  </gazebo>
+  <!-- Add colors to joints in gazebo-->
+  <gazebo reference="movable_link">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+  <gazebo reference="z_arm_link">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  <gazebo reference="y_arm_link">
+    <material>Gazebo/Green</material>
+  </gazebo>
+  <gazebo reference="x_arm_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="gripper">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <!-- Add transmission parts-->
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="z_prismatic_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="x_prismatic_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="y_prismatic_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+</robot>
+
+
+
+
+
+
+
+

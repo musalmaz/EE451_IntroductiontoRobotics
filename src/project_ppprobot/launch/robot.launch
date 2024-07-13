@@ -1,0 +1,44 @@
+<!-- ppp_robot_control.launch -->
+
+<launch>
+
+  <arg name="world_file" default="$(find project_ppprobot)/worlds/my_world.world"/>
+
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="recording" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+
+  <param name="robot_description" command="cat '$(find project_ppprobot)/urdf/robot.urdf'"/>
+
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <!-- <rosparam file="$(find project1)/config/ppp_control.yaml" command="load"/> -->
+   <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find project_ppprobot)/config/ppp_control.yaml" command="load"/>
+  <node
+    name="spawn_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-param robot_description -urdf -model robot"
+    output="screen" />
+
+ <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="PPP_Robot" args="z_prismatic_joint_position_controller x_prismatic_joint_position_controller y_prismatic_joint_position_controller joint_state_controller"/>
+
+
+  <!-- Combine joint values -->
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/PPP_Robot/joint_states"/>
+  </node>
+
+
+</launch>
